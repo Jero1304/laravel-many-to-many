@@ -31,7 +31,8 @@ class UpdateProjectRequest extends FormRequest
                 Rule::unique('projects','title')->ignore($this->project)
             ],
             'content' => 'nullable|string',
-            'type_id' =>  'nullable|exists:types,id'
+            'type_id' =>  'nullable|exists:types,id',
+            'technologies' =>'exists:technologies,id'
             
         ];
     }

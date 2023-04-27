@@ -52,6 +52,29 @@
                 @enderror
             </div>
 
+             {{-- CHECK-BOX --}}
+            <div class="mb-3">
+                <label for="technologies" class="form-label">technologies</label>
+
+                <div class="d-flex flex-wrap gap-3 @error('technologies') is-invalid @enderror">
+                    @foreach ($technologies as $technology)
+                        <div class="form-check">
+                            <input name="technologies[]" @checked( in_array($technology->id, old('technologies', $project->getTechnologiesIds())) ) value="{{ $technology->id }}" class="form-check-input"
+                                type="checkbox" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                {{ $technology->name }}
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+
+                @error('technologies')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
             <button type="submit" class="btn btn-success">Save</button>
         </form>
     </div>

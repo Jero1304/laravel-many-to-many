@@ -99,6 +99,11 @@ class ProjectController extends Controller
         }
 
         $project->update($data);
+        if (isset($data['technologies'])) {
+            $project->technologies()->sync($data['technologies']);
+        } else{
+            $project->technologies()->sync([]);
+        }
 
         return to_route('projects.show', $project);
 
@@ -121,6 +126,7 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         if ($project->trashed()) {
+
             $project->forceDelete();
         } else {
             $project->delete();
