@@ -8,6 +8,7 @@ use App\Models\Technology;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -16,10 +17,20 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::withTrashed()->get();
-        return view('projects.index', compact('projects'));
+        $trashed = $request->input('trashed');
+
+        if ($trashed) {
+            $projects = Project::onlyTrashed()->get();
+        } else {            
+            $projects = Project::all();
+        }
+
+        $num_trashed = Project::onlyTrashed()->count();
+
+
+        return view('projects.index', compact('projects','num_trashed'));
     }
 
     /**
@@ -31,8 +42,8 @@ class ProjectController extends Controller
     {
         $types = Type::orderBy('name', 'asc')->get();
 
-        $technologies = Technology::orderBy('name','asc')->get();
-        return view('projects.create', compact('types','technologies'));
+        $technologies = Technology::orderBy('name', 'asc')->get();
+        return view('projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -49,7 +60,7 @@ class ProjectController extends Controller
 
         $project = Project::create($data);
 
-        if(isset($data['technologies'])){
+        if (isset($data['technologies'])) {
             $project->technologies()->attach($data['technologies']);
         }
 
@@ -76,10 +87,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        $types = Type::orderBy('name','asc')->get();
-        $technologies = Technology::orderBy('name','asc')->get();
+        $types = Type::orderBy('name', 'asc')->get();
+        $technologies = Technology::orderBy('name', 'asc')->get();
 
-        return view('projects.edit', compact('project','types','technologies'));
+        return view('projects.edit', compact('project', 'types', 'technologies'));
 
     }
 
@@ -101,7 +112,7 @@ class ProjectController extends Controller
         $project->update($data);
         if (isset($data['technologies'])) {
             $project->technologies()->sync($data['technologies']);
-        } else{
+        } else {
             $project->technologies()->sync([]);
         }
 
@@ -134,6 +145,7 @@ class ProjectController extends Controller
             $project->delete();
         }
 
-        return to_route('projects.index');
+
+        return back();
     }
 }

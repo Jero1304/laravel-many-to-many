@@ -7,6 +7,11 @@
 
 
             <div>
+                @if (request('trashed'))     
+                <a class="btn btn-primary btn-light border" href="{{ route('projects.index') }}">Tutti i Progetti</a>
+                @else
+                <a class="btn btn-primary btn-light border" href="{{ route('projects.index',['trashed' => true]) }}">Cestino ({{$num_trashed}})</a>
+                @endif
                 <a class="btn btn-primary" href="{{ route('projects.create') }}">Nuovo project</a>
             </div>
         </div>
