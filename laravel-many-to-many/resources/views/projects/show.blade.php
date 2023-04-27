@@ -4,7 +4,7 @@
     <div class="container py-5">
         <div class="d-flex align-items-center">
             <div class="me-auto">
-                <h1>Title:
+                <h1>Title: {{ $project->title }}
                     @if ($project->type)
                         <span class="badge bg-warning rounded-pill">{{ $project->type->name }}</span>
                     @else
@@ -40,7 +40,7 @@
         <h2>Articoli Correlati:</h2>
         @if ($project->type)
             <ul>
-                @foreach ($project->type->projects as $related_project)
+                @foreach ($project->type->projects()->where('id', '!=', $project->id)->get() as $related_project)
                     <li>
                         <a href="{{ route('projects.show', $related_project) }}"> {{ $related_project->title }}</a>
                     </li>

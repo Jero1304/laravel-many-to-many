@@ -127,6 +127,8 @@ class ProjectController extends Controller
     {
         if ($project->trashed()) {
 
+            // $project->technologies()->detach();
+
             $project->forceDelete();
         } else {
             $project->delete();
