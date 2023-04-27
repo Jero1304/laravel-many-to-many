@@ -14,6 +14,12 @@
 
                 <p>Slug: {{ $project->slug }}</p>
 
+                <ul class="ps-0 d-flex gap-1">
+                    @foreach ($project->technologies as $technology)
+                        <span class="badge bg-secondary">{{ $technology->name }}</span>
+                    @endforeach
+                </ul>
+
                 <p>Content: <br> {{ $project->content }}</p>
 
             </div>
@@ -36,7 +42,7 @@
             <ul>
                 @foreach ($project->type->projects as $related_project)
                     <li>
-                        <a href="{{ route('projects.show',$related_project)}}"> {{ $related_project->title }}</a>
+                        <a href="{{ route('projects.show', $related_project) }}"> {{ $related_project->title }}</a>
                     </li>
                 @endforeach
             </ul>

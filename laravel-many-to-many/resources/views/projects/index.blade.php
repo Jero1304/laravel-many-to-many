@@ -18,7 +18,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Titolo</th>
-                    <th>Categoria</th>
+                    <th>Tipo</th>
+                    <th>Technologie</th>
                     <th>Data creazione</th>
                     <th>Data Modifica</th>
                     <th>Eliminato</th>
@@ -29,13 +30,22 @@
                 @forelse($projects as $project)
                     <tr>
                         <td>{{ $project->id }}</td>
+
                         <td>
                             <a href="{{ route('projects.show', $project) }}">{{ $project->title }}</a>
                         </td>
-                        <td>{{$project->type ? $project->type->name : '-'}}</td>
+
+                        <td>{{ $project->type ? $project->type->name : '-' }}</td>
+
+                        <td>
+                            @foreach ($project->technologies as $technology)
+                                <span class="badge bg-secondary">{{ $technology->name }}</span>
+                            @endforeach
+                        </td>
+                        
                         <td>{{ $project->created_at->format('d/m/Y') }}</td>
                         <td>{{ $project->updated_at->format('d/m/Y') }}</td>
-                        <td>{{ $project->trashed() ? 'Eliminato il: ' . $project->deleted_at : '' }}</td>
+                        <td>{{ $project->trashed() ? 'Eliminato il: ' . $project->deleted_at->format('d/m/Y') : '' }}</td>
                         <td>
                             <div class="d-flex">
 
